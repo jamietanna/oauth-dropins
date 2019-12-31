@@ -14,10 +14,12 @@ from .models import BaseAuth
 from .webutil import appengine_info, util
 from .webutil.util import json_loads
 
-import os
-
-MEETUP_CLIENT_ID = os.environ['meetup_client_id']
-MEETUP_CLIENT_SECRET = os.environ['meetup_client_secret']
+if appengine_info.DEBUG:
+    MEETUP_CLIENT_ID = util.read('meetup_client_id_local')
+    MEETUP_CLIENT_SECRET = util.read('meetup_client_secret_local')
+else:
+    MEETUP_CLIENT_ID = util.read('/app/meetup_client_id')
+    MEETUP_CLIENT_SECRET = util.read('/app/meetup_client_secret')
 
 GET_AUTH_CODE_URL = '&'.join((
     'https://secure.meetup.com/oauth2/authorize?'
